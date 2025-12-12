@@ -74,6 +74,7 @@ jobs:
           submodules: recursive
 
       - name: Restore bridge files
+        if: false
         uses: actions/download-artifact@master
         with:
           name: bridge-artifact
