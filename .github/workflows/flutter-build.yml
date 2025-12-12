@@ -37,10 +37,6 @@ env:
   #  Or we may face build issue like 
   #  https://github.com/rustdesk/rustdesk/actions/runs/14414119794/job/40427970174
   # 2. Update the `VCPKG_COMMIT_ID` in `ci.yml` and `playground.yml`.
-  # read from secrets
-  RENDEZVOUS_SERVERS: "${{ secrets.RENDEZVOUS_SERVERS }}"
-  RS_PUB_KEY: "${{ secrets.RS_PUB_KEY }}"
-  
   VCPKG_COMMIT_ID: "120deac3062162151622ca4860575a33844ba10b"
   ARMV7_VCPKG_COMMIT_ID: "6f29f12e82a8293156836ad81cc9bf5af41fe836" # 2025.01.13, got "/opt/artifacts/vcpkg/vcpkg: No such file or directory" with latest version
   VERSION: "1.4.4"
@@ -168,9 +164,6 @@ jobs:
         shell: bash
 
       - name: Build rustdesk
-        env:
-          RENDEZVOUS_SERVERS: "${{ env.RENDEZVOUS_SERVERS }}"
-          RS_PUB_KEY: "${{ env.RS_PUB_KEY }}"
         run: |
           # Windows: build RustDesk
           python3 .\build.py --portable --hwcodec --flutter --vram --skip-portable-pack
@@ -707,9 +700,6 @@ jobs:
           rustc -V
 
       - name: Build rustdesk
-        env:
-          RENDEZVOUS_SERVERS: "${{ env.RENDEZVOUS_SERVERS }}"
-          RS_PUB_KEY: "${{ env.RS_PUB_KEY }}"
         run: |
           if [ "${{ matrix.job.target }}" = "aarch64-apple-darwin" ]; then
             MIN_MACOS_VERSION="12.3"
@@ -973,8 +963,6 @@ jobs:
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
-          RENDEZVOUS_SERVERS: "${{ env.RENDEZVOUS_SERVERS }}"
-          RS_PUB_KEY: "${{ env.RS_PUB_KEY }}"
         run: |
           rustup target add ${{ matrix.job.target }}
           cargo install cargo-ndk --version ${{ env.CARGO_NDK_VERSION }} --locked
