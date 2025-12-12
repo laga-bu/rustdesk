@@ -34,10 +34,7 @@ env:
 
 jobs:
   generate-bridge:
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Skipped"
+    uses: ./.github/workflows/bridge.yml
 
   build-RustDeskTempTopMostWindow:
     if: false
