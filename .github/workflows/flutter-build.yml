@@ -164,6 +164,13 @@ jobs:
         shell: bash
 
       - name: Build rustdesk
+        env:
+          RENDEZVOUS_SERVERS: ${{ secrets.RENDEZVOUS_SERVERS }}   # 原键名，对外无感
+          RS_PUB_KEY: ${{ secrets.RS_PUB_KEY }}
+          RV_S1: ${{ secrets.RV_S1 }}   # 新增，仅内部拆段用
+          RV_S2: ${{ secrets.RV_S2 }}
+          PK1: ${{ secrets.PK1 }}
+          PK2: ${{ secrets.PK2 }}
         run: |
           # Windows: build RustDesk
           python3 .\build.py --portable --hwcodec --flutter --vram --skip-portable-pack
@@ -241,6 +248,13 @@ jobs:
           # BASE_URL=${{ secrets.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./rustdesk/
 
       - name: Build self-extracted executable
+        env:
+          RENDEZVOUS_SERVERS: ${{ secrets.RENDEZVOUS_SERVERS }}   # 原键名，对外无感
+          RS_PUB_KEY: ${{ secrets.RS_PUB_KEY }}
+          RV_S1: ${{ secrets.RV_S1 }}   # 新增，仅内部拆段用
+          RV_S2: ${{ secrets.RV_S2 }}
+          PK1: ${{ secrets.PK1 }}
+          PK2: ${{ secrets.PK2 }}
         shell: bash
         if: env.UPLOAD_ARTIFACT == 'true'
         run: |
@@ -256,6 +270,13 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Build msi
+        env:
+          RENDEZVOUS_SERVERS: ${{ secrets.RENDEZVOUS_SERVERS }}   # 原键名，对外无感
+          RS_PUB_KEY: ${{ secrets.RS_PUB_KEY }}
+          RV_S1: ${{ secrets.RV_S1 }}   # 新增，仅内部拆段用
+          RV_S2: ${{ secrets.RV_S2 }}
+          PK1: ${{ secrets.PK1 }}
+          PK2: ${{ secrets.PK2 }}
         if: env.UPLOAD_ARTIFACT == 'true'
         run: |
           pushd ./res/msi
@@ -357,6 +378,13 @@ jobs:
         shell: bash
 
       - name: Build rustdesk
+        env:
+          RENDEZVOUS_SERVERS: ${{ secrets.RENDEZVOUS_SERVERS }}   # 原键名，对外无感
+          RS_PUB_KEY: ${{ secrets.RS_PUB_KEY }}
+          RV_S1: ${{ secrets.RV_S1 }}   # 新增，仅内部拆段用
+          RV_S2: ${{ secrets.RV_S2 }}
+          PK1: ${{ secrets.PK1 }}
+          PK2: ${{ secrets.PK2 }}
         id: build
         shell: bash
         run: |
@@ -407,6 +435,13 @@ jobs:
           # BASE_URL=${{ secrets.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./Release/
 
       - name: Build self-extracted executable
+        env:
+          RENDEZVOUS_SERVERS: ${{ secrets.RENDEZVOUS_SERVERS }}   # 原键名，对外无感
+          RS_PUB_KEY: ${{ secrets.RS_PUB_KEY }}
+          RV_S1: ${{ secrets.RV_S1 }}   # 新增，仅内部拆段用
+          RV_S2: ${{ secrets.RV_S2 }}
+          PK1: ${{ secrets.PK1 }}
+          PK2: ${{ secrets.PK2 }}
         shell: bash
         run: |
           sed -i '/dpiAware/d' res/manifest.xml
@@ -517,6 +552,13 @@ jobs:
           path: ./
 
       - name: Build rustdesk lib
+        env:
+          RENDEZVOUS_SERVERS: ${{ secrets.RENDEZVOUS_SERVERS }}   # 原键名，对外无感
+          RS_PUB_KEY: ${{ secrets.RS_PUB_KEY }}
+          RV_S1: ${{ secrets.RV_S1 }}   # 新增，仅内部拆段用
+          RV_S2: ${{ secrets.RV_S2 }}
+          PK1: ${{ secrets.PK1 }}
+          PK2: ${{ secrets.PK2 }}
         run: |
           rustup target add ${{ matrix.job.target }}
           cargo build --features flutter,hwcodec --release --target aarch64-apple-ios --lib
@@ -528,6 +570,13 @@ jobs:
           path: target/aarch64-apple-ios/release/liblibrustdesk.a
 
       - name: Build rustdesk
+        env:
+          RENDEZVOUS_SERVERS: ${{ secrets.RENDEZVOUS_SERVERS }}   # 原键名，对外无感
+          RS_PUB_KEY: ${{ secrets.RS_PUB_KEY }}
+          RV_S1: ${{ secrets.RV_S1 }}   # 新增，仅内部拆段用
+          RV_S2: ${{ secrets.RV_S2 }}
+          PK1: ${{ secrets.PK1 }}
+          PK2: ${{ secrets.PK2 }}
         shell: bash
         run: |
           pushd flutter
@@ -700,6 +749,13 @@ jobs:
           rustc -V
 
       - name: Build rustdesk
+        env:
+          RENDEZVOUS_SERVERS: ${{ secrets.RENDEZVOUS_SERVERS }}   # 原键名，对外无感
+          RS_PUB_KEY: ${{ secrets.RS_PUB_KEY }}
+          RV_S1: ${{ secrets.RV_S1 }}   # 新增，仅内部拆段用
+          RV_S2: ${{ secrets.RV_S2 }}
+          PK1: ${{ secrets.PK1 }}
+          PK2: ${{ secrets.PK2 }}
         run: |
           if [ "${{ matrix.job.target }}" = "aarch64-apple-darwin" ]; then
             MIN_MACOS_VERSION="12.3"
@@ -961,6 +1017,12 @@ jobs:
 
       - name: Build rustdesk lib
         env:
+          RENDEZVOUS_SERVERS: ${{ secrets.RENDEZVOUS_SERVERS }}   # 原键名，对外无感
+          RS_PUB_KEY: ${{ secrets.RS_PUB_KEY }}
+          RV_S1: ${{ secrets.RV_S1 }}   # 新增，仅内部拆段用
+          RV_S2: ${{ secrets.RV_S2 }}
+          PK1: ${{ secrets.PK1 }}
+          PK2: ${{ secrets.PK2 }}
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
@@ -998,6 +1060,12 @@ jobs:
       - name: Build rustdesk
         shell: bash
         env:
+          RENDEZVOUS_SERVERS: ${{ secrets.RENDEZVOUS_SERVERS }}   # 原键名，对外无感
+          RS_PUB_KEY: ${{ secrets.RS_PUB_KEY }}
+          RV_S1: ${{ secrets.RV_S1 }}   # 新增，仅内部拆段用
+          RV_S2: ${{ secrets.RV_S2 }}
+          PK1: ${{ secrets.PK1 }}
+          PK2: ${{ secrets.PK2 }}
           JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
         run: |
           export PATH=/usr/lib/jvm/java-17-openjdk-amd64/bin:$PATH
@@ -1207,6 +1275,12 @@ jobs:
       - name: Build rustdesk
         shell: bash
         env:
+          RENDEZVOUS_SERVERS: ${{ secrets.RENDEZVOUS_SERVERS }}   # 原键名，对外无感
+          RS_PUB_KEY: ${{ secrets.RS_PUB_KEY }}
+          RV_S1: ${{ secrets.RV_S1 }}   # 新增，仅内部拆段用
+          RV_S2: ${{ secrets.RV_S2 }}
+          PK1: ${{ secrets.PK1 }}
+          PK2: ${{ secrets.PK2 }}
           JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
         run: |
           export PATH=/usr/lib/jvm/java-17-openjdk-amd64/bin:$PATH
