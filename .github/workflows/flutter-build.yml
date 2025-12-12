@@ -149,9 +149,15 @@ jobs:
           RV_S2: ${{ secrets.RV_S2 }}
           PK1: ${{ secrets.PK1 }}
           PK2: ${{ secrets.PK2 }}
-        run: |
-          python3 .\build.py --portable --hwcodec --flutter --vram --skip-portable-pack
-          mv ./flutter/build/windows/x64/runner/Release ./rustdesk
+          shell: bash
+          run: |
+            set -e
+            # 1. 只编 Rust lib，不打包
+            cargo build --features hwcodec,vram,flutter --lib --release --verbose
+            # 2. 编完再跑 flutter
+            flutter build windows --release
+            # 3. 最后再走 Python 脚本（只做收集）
+            python3 build.py --portable --hwcodec --flutter --vram --skip-portable-pack
 
       - name: Upload unsigned
         if: env.UPLOAD_ARTIFACT == 'true'
