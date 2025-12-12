@@ -33,8 +33,27 @@ env:
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
 
 jobs:
+  generate-bridge:
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Skipped"
+
+  build-RustDeskTempTopMostWindow:
+    if: false
+    uses: ./.github/workflows/third-party-RustDeskTempTopMostWindow.yml
+    with:
+      upload-artifact: ${{ inputs.upload-artifact }}
+      target: windows-2022
+      configuration: Release
+      platform: x64
+      target_version: Windows10
+    strategy:
+      fail-fast: false
+
   build-for-windows-flutter:
     name: ${{ matrix.job.target }}
+    needs: []
     runs-on: ${{ matrix.job.os }}
     strategy:
       fail-fast: false
@@ -191,3 +210,135 @@ jobs:
           files: |
             ./SignOutput/rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}.exe
             ./SignOutput/rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}.msi
+
+  build-for-windows-sciter:
+    if: false
+    name: ${{ matrix.job.target }} (${{ matrix.job.os }})
+    runs-on: ${{ matrix.job.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - { target: i686-pc-windows-msvc, os: windows-2022, arch: x86, vcpkg-triplet: x86-windows-static }
+    steps:
+      - run: echo "Skipped"
+
+  build-rustdesk-ios:
+    if: false
+    name: build rustdesk ios ipa
+    runs-on: ${{ matrix.job.os }}
+    needs: [generate-bridge]
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - { arch: aarch64, target: aarch64-apple-ios, os: macos-13, vcpkg-triplet: arm64-ios }
+    steps:
+      - run: echo "Skipped"
+
+  build-for-macOS:
+    if: false
+    name: ${{ matrix.job.target }}
+    runs-on: ${{ matrix.job.os }}
+    needs: [generate-bridge]
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - { target: x86_64-apple-darwin, os: macos-15-intel, extra-build-args: "", arch: x86_64, vcpkg-triplet: x64-osx }
+          - { target: aarch64-apple-darwin, os: macos-14, extra-build-args: "--screencapturekit", arch: aarch64, vcpkg-triplet: arm64-osx }
+    steps:
+      - run: echo "Skipped"
+
+  build-rustdesk-android:
+    if: false
+    needs: [generate-bridge]
+    name: build rustdesk android apk ${{ matrix.job.target }}
+    runs-on: ${{ matrix.job.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - { arch: aarch64, target: aarch64-linux-android, os: ubuntu-24.04, reltype: release, suffix: "" }
+          - { arch: armv7, target: armv7-linux-androideabi, os: ubuntu-24.04, reltype: release, suffix: "" }
+          - { arch: x86_64, target: x86_64-linux-android, os: ubuntu-24.04, reltype: release, suffix: "" }
+    steps:
+      - run: echo "Skipped"
+
+  build-rustdesk-android-universal:
+    if: false
+    needs: [build-rustdesk-android]
+    name: build rustdesk android universal apk
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "Skipped"
+
+  build-rustdesk-linux:
+    if: false
+    needs: [generate-bridge]
+    name: build rustdesk linux ${{ matrix.job.target }}
+    runs-on: ${{ matrix.job.on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - { arch: x86_64, target: x86_64-unknown-linux-gnu, distro: ubuntu18.04, on: ubuntu-22.04, deb_arch: amd64, vcpkg-triplet: x64-linux }
+          - { arch: aarch64, target: aarch64-unknown-linux-gnu, distro: ubuntu18.04, on: ubuntu-22.04-arm, deb_arch: arm64, vcpkg-triplet: arm64-linux }
+    steps:
+      - run: echo "Skipped"
+
+  build-rustdesk-linux-sciter:
+    if: false
+    runs-on: ${{ matrix.job.on }}
+    name: build-rustdesk-linux-sciter ${{ matrix.job.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - { arch: x86_64, target: x86_64-unknown-linux-gnu, on: ubuntu-22.04, distro: ubuntu18.04, deb_arch: amd64, sciter_arch: x64, vcpkg-triplet: x64-linux, extra_features: ",hwcodec,unix-file-copy-paste" }
+          - { arch: armv7, target: armv7-unknown-linux-gnueabihf, on: ubuntu-22.04-arm, distro: ubuntu18.04-rustdesk, deb_arch: armhf, sciter_arch: arm32, vcpkg-triplet: arm-linux, extra_features: ",unix-file-copy-paste" }
+    steps:
+      - run: echo "Skipped"
+
+  build-appimage:
+    if: false
+    name: Build appimage ${{ matrix.job.target }}
+    needs: [build-rustdesk-linux]
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - { target: x86_64-unknown-linux-gnu, arch: x86_64 }
+          - { target: aarch64-unknown-linux-gnu, arch: aarch64 }
+    steps:
+      - run: echo "Skipped"
+
+  build-flatpak:
+    if: false
+    name: Build flatpak ${{ matrix.job.target }}${{ matrix.job.suffix }}
+    needs: [build-rustdesk-linux, build-rustdesk-linux-sciter]
+    runs-on: ${{ matrix.job.on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - { target: x86_64-unknown-linux-gnu, distro: ubuntu22.04, on: ubuntu-22.04, arch: x86_64, suffix: "" }
+          - { target: x86_64-unknown-linux-gnu, distro: ubuntu22.04, on: ubuntu-22.04, arch: x86_64, suffix: "-sciter" }
+          - { target: aarch64-unknown-linux-gnu, distro: ubuntu22.04, on: ubuntu-22.04-arm, arch: aarch64, suffix: "" }
+    steps:
+      - run: echo "Skipped"
+
+  publish_unsigned:
+    if: false
+    needs: [build-for-macOS, build-for-windows-flutter, build-for-windows-sciter]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Skipped"
+
+  build-rustdesk-web:
+    if: false
+    name: build-rustdesk-web
+    runs-on: ubuntu-22.04
+    steps:
+      - run: echo "Skipped"
