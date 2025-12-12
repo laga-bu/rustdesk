@@ -50,7 +50,7 @@ jobs:
 
   build-for-windows-flutter:
     name: ${{ matrix.job.target }}
-    needs: []
+    needs: [generate-bridge]
     runs-on: ${{ matrix.job.os }}
     strategy:
       fail-fast: false
